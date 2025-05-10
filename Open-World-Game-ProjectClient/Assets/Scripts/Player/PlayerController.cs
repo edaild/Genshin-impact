@@ -1,4 +1,5 @@
 using Unity.VisualScripting;
+using UnityEditor.XR;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.DualShock.LowLevel;
@@ -15,12 +16,12 @@ public class PlayerController : MonoBehaviour
     private bool isJumpButton;          // 모바일에서 사용
     private bool isMove;
 
+    public bool isPlayerzon;
+
     private Vector3 forward;
     private Vector3 right;
     [Header("카메라 컨트럴러")]
    [SerializeField] private CameraController cameraController;
-
-
     private CharacterController controller_P;
     private CharacterController controller_M;
 
@@ -48,8 +49,6 @@ public class PlayerController : MonoBehaviour
         right.y = 0f;
         forward.Normalize();
         right.Normalize();
-
-
     }
 
     private void FixedUpdate()
@@ -77,13 +76,19 @@ public class PlayerController : MonoBehaviour
 
         // 애니매이션
         playerSO.player_Animator.SetBool("isRun", isMove);
+
+   
+
+        if (P_DST.magnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(P_DST);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * cameraController.rotationSpeed);
+        }
     }
 
     // 모바일 조이스틱
     public void JoystickMove()
     {
-      
-
         float M_HorizontalInput = joystick.Horizontal;
         float M_VerticalInput = joystick.Vertical;
 
@@ -163,9 +168,11 @@ public class PlayerController : MonoBehaviour
     // 플레이어 공격 로직
     private void Attack()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("일반 공격");
+            playerSO.player_Animator.SetBool("IsNoallAttack", true);
+
         }
         
         if (Input.GetKeyDown(KeyCode.Q))
@@ -217,6 +224,19 @@ public class PlayerController : MonoBehaviour
         else
         {
             Debug.LogWarning("playerSO 또는 player_Rigidbody가 null입니다. 확인이 필요합니다.");
+        }
+    }
+    //-----------------------------------------------------------------------------------------------------------------------------------
+    // 플레이어 안전 구역
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Playerzon"))
+        {
+            isPlayerzon = true;
+        }
+        else
+        {
+            isPlayerzon = false;
         }
     }
     //-----------------------------------------------------------------------------------------------------------------------------------

@@ -1,10 +1,9 @@
 using UnityEngine;
-
+// 초기 플레이어 관련
+//----------------------------------------------------------------------------------
 [CreateAssetMenu(fileName = "Player", menuName = "GameObject/Player" )]
 public class PlayerSO : ScriptableObject
 {
-    // 초기 플레이어 정보
-    //-----------------------------------------------
     public int player_Uid;
     public string player_Id;
     public string player_Password;
@@ -18,5 +17,20 @@ public class PlayerSO : ScriptableObject
     public float player_MinHp = 10f;
     public Rigidbody player_Rigidbody;
     public Animator player_Animator;
-    //-----------------------------------------------
+
 }
+//----------------------------------------------------------------------------------
+
+// 적 관련 
+[CreateAssetMenu(fileName = "Enemy", menuName = "GameObject/Enemy")]
+public class EnemySO : ScriptableObject
+{
+    public int enemy_Id;
+    public string enemy_Name;
+    public int enemy_Lever = 1;
+    public float enemy_Damage = 5f;
+    public float enemy_Hp = 50f;
+    public float enemy_Speed = 2.5f;
+    public Animator enemy_Animator;
+}
+//----------------------------------------------------------------------------------
