@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private VariableJoystick joystick;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private PlayerSO playerSO;
+    private Vector3 moveInput; // 조이스틱 방향 저장용
     private bool isJump;
     private bool isJumpButton;          // 모바일에서 사용
     private bool isMove;
@@ -49,6 +50,8 @@ public class PlayerController : MonoBehaviour
         right.y = 0f;
         forward.Normalize();
         right.Normalize();
+
+
     }
 
     private void FixedUpdate()
@@ -57,6 +60,7 @@ public class PlayerController : MonoBehaviour
         JoystickMove();
         // 키보드 입력
         keybordMove();
+
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------
@@ -219,7 +223,17 @@ public class PlayerController : MonoBehaviour
         {
             // 기존의 이동을 Rigidbody를 이용하여 처리
             Vector3 velocity = moveDirection * playerSO.player_Speed;
-            playerSO.player_Rigidbody.linearVelocity = new Vector3(velocity.x, playerSO.player_Rigidbody.linearVelocity.y, velocity.z); // y는 유지하여 점프를 처리
+            playerSO.player_Rigidbody.linearVelocity = new Vector3(velocity.x, playerSO.player_Rigidbody.linearVelocity.y, velocity.z);
+
+
+            if (moveInput.magnitude > 0.1f)
+            {
+                Vector3 move = moveInput * playerSO.player_Speed * Time.fixedDeltaTime;
+                playerSO.player_Rigidbody.MovePosition(playerSO.player_Rigidbody.position + move);
+            }
+
+            // 이동 테스트 (물리 무시)
+            transform.position += moveDirection * playerSO.player_Speed * Time.deltaTime;
         }
         else
         {

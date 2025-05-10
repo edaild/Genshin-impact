@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 
+
 public class CameraController : MonoBehaviour
 {
     [Header("카메라 회명 설정")]
     public float rotationSpeed = 5f;
+    public Vector3 offset = new Vector3(0, 5, -7); // 카메라 위치 오프셋
+    public float smoothSpeed = 5f;
     public Transform targetPlayer;
     public float zoomSpeed = 5f;
     public float minDistance = 2f;
@@ -70,6 +73,11 @@ public class CameraController : MonoBehaviour
         // 카메라 위치 조절
         Vector3 dir = (transform.position - targetPlayer.position).normalized;
         transform.position = targetPlayer.position + dir * currentDistance;
+
+        // 카메라가 항상 플레이어를 바라보게
+        Vector3 lookDirection = (targetPlayer.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(lookDirection);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, smoothSpeed * Time.deltaTime);
     }
 
     private void M_LateUpdate()
@@ -91,6 +99,10 @@ public class CameraController : MonoBehaviour
             currentDistance -= difference * zoomSpeed;
             currentDistance = Mathf.Clamp(currentDistance, minDistance, maxDistance);
 
+            // 카메라가 항상 플레이어를 바라보게
+            Vector3 lookDirection = (targetPlayer.position - transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(lookDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, smoothSpeed * Time.deltaTime);
         }
     }
     // ------------------------------------------------------------------------------------------------------------
