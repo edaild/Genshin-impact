@@ -1,6 +1,6 @@
 using UnityEngine;
-// 초기 플레이어 관련
 //----------------------------------------------------------------------------------
+// 초기 플레이어 관련
 [CreateAssetMenu(fileName = "Player", menuName = "GameObject/Player" )]
 public class PlayerSO : ScriptableObject
 {
@@ -11,7 +11,8 @@ public class PlayerSO : ScriptableObject
     public float player_Speed = 5f;
     public float playre_Jump = 5f;
     public int player_Lever = 1;
-    public float player_Attack = 10f;
+    public float player_CurrStamina = 100f;
+    public float player_MaxStamina = 100f;
     public float player_CurrHp = 100f;
     public float player_MaxHp = 100f;
     public float player_MinHp = 10f;
@@ -20,17 +21,30 @@ public class PlayerSO : ScriptableObject
 
 }
 //----------------------------------------------------------------------------------
-
-// 적 관련 
-[CreateAssetMenu(fileName = "Enemy", menuName = "GameObject/Enemy")]
-public class EnemySO : ScriptableObject
+// Item Type 관련
+public enum ItemType
 {
-    public int enemy_Id;
-    public string enemy_Name;
-    public int enemy_Lever = 1;
-    public float enemy_Damage = 5f;
-    public float enemy_Hp = 50f;
-    public float enemy_Speed = 2.5f;
-    public Animator enemy_Animator;
+    Flashlight,         // 손전등
+    MedicalKit,         // 메디컬 키트
+    ChocolateBar,       // 초코바
+    SleepingBag,        // 침냥
+    Tent,               // 텐트
+    MRE,                // 전투식량
 }
+
+
+// Item 관련
+[CreateAssetMenu(fileName = "Item", menuName = "GameObject/Item")]
+public class ItemSO : ScriptableObject
+{
+    public int item_Id;
+    public string item_Name;
+    public int item_Lever = 1;
+    public ItemType ItemType;
+}
+
 //----------------------------------------------------------------------------------
+
+
+
+

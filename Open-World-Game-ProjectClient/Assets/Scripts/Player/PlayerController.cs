@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 forward;
     private Vector3 right;
-    [Header("카메라 컨트럴러")]
+
    [SerializeField] private CameraController cameraController;
     private CharacterController controller_P;
     private CharacterController controller_M;
@@ -174,25 +174,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("일반 공격");
-            playerSO.player_Animator.SetBool("IsNoallAttack", true);
-
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Debug.Log("Q 스킬 공격");
-        }
-
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            Debug.Log("W 스킬 공격");
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("E 스킬 공격");
-        }
+            Debug.Log("상효작용");
+        }      
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------
@@ -201,7 +184,7 @@ public class PlayerController : MonoBehaviour
     {
         if (playerSO != null && playerSO.player_CurrHp <= playerSO.player_MinHp)
         {
-            Debug.Log("조심하세요 한번 더 공격을 받으면 사망합니다.");
+            Debug.Log("지금 당장 메디컬 키트를 활용해서 해복하세요 아니면 사망 합니다.");
         }
     }
 
@@ -238,19 +221,6 @@ public class PlayerController : MonoBehaviour
         else
         {
             Debug.LogWarning("playerSO 또는 player_Rigidbody가 null입니다. 확인이 필요합니다.");
-        }
-    }
-    //-----------------------------------------------------------------------------------------------------------------------------------
-    // 플레이어 안전 구역
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Playerzon"))
-        {
-            isPlayerzon = true;
-        }
-        else
-        {
-            isPlayerzon = false;
         }
     }
     //-----------------------------------------------------------------------------------------------------------------------------------
